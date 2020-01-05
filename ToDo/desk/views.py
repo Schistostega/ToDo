@@ -1,6 +1,8 @@
 import pytz
 from django.views import generic
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+
 from .models import Project
 
 
@@ -14,12 +16,27 @@ def set_timezone(request):
 
 class ProjectListView(generic.ListView):
     model = Project
+    extra_context = {'title': 'Projects List'}
 
 
 class ProjectDetailView(generic.DetailView):
     model = Project
+    extra_context = {'title': 'Projects Detail'}
+
+
+class ProjectCreateView(generic.CreateView):
+    model = Project
+    fields = ('name', )
+    extra_context = {'title': 'Projects Create'}
 
 
 class ProjectUpdateView(generic.UpdateView):
     model = Project
-    fields = ('name',)
+    fields = ('name', )
+    extra_context = {'title': 'Projects Update'}
+    template_name_suffix = '_update_form'
+
+
+class ProjectDeleteView(generic.DeleteView):
+    model = Project
+    success_url = reverse_lazy('desk:project_list')

@@ -10,9 +10,15 @@
 </head>
 <body>
     <nav>
-        <ul>
-            <li><a href="{% url 'desk:project_create' %}">Create Project</a></li>
-        </ul>
+        {% if title == 'Projects List' %}
+            <ul>
+                <li><a href="{% url 'desk:project_create' %}">Create Project</a></li>
+            </ul>
+        {% elif title == 'Projects Update' or title == 'Projects Create' or title == 'Projects Detail' %}
+            <ul>
+                <li><a href="{% url 'desk:project_list' %}">Back to projects list</a></li>
+            </ul>
+        {% endif %}
     </nav>
     {% block content %}
     {% endblock %}
