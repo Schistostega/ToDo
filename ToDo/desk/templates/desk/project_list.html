@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% if project_list %}
+        <ul>
+            {% for project in project_list %}
+                <li><a href="{% url 'desk:project_detail' project.id %}">{{ project.name }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <h2>There are no projects yet.</h2>
+    {% endif %}
+</body>
+</html>

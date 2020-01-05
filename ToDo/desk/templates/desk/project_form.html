@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>{{ project }}</h1>
+
+    {% if error_message %}
+        <p><strong>{{ error_message }}</strong></p>
+    {% endif %}
+
+    <form action="{% url 'desk:project_detail' project.id %}" method="post">
+        {% csrf_token %}
+        <label for="{{ project.name }}-id">Project name: </label>
+        <input type="text" name="name" id="{{ project.name }}-id">
+        <input type="submit" value="Update">
+    </form>
+</body>
+</html>
