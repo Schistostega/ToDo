@@ -14,9 +14,17 @@
             <ul>
                 <li><a href="{% url 'desk:project_create' %}">Create Project</a></li>
             </ul>
-        {% elif title == 'Projects Update' or title == 'Projects Create' or title == 'Projects Detail' %}
+        {% elif title == 'Project Update' or title == 'Project Create' or title == 'Project Detail' %}
             <ul>
                 <li><a href="{% url 'desk:project_list' %}">Back to projects list</a></li>
+            </ul>
+        {% elif title == 'Tasks List' %}
+            <ul>
+                <li><a href="{% url 'desk:task_create' %}">Create Task</a></li>
+            </ul>
+        {% elif title == 'Task Update' or title == 'Task Create' or title == 'Task Detail' %}
+            <ul>
+                <li><a href="{% url 'desk:task_list' %}">Back to tasks list</a></li>
             </ul>
         {% endif %}
     </nav>

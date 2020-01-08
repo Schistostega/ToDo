@@ -3,8 +3,8 @@ from django.views import generic
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
-from .models import Project
-from .forms import ProjectForm
+from .models import Project, Task
+from .forms import ProjectForm, TaskForm
 
 
 def set_timezone(request):
@@ -15,6 +15,12 @@ def set_timezone(request):
         return render(request, 'desk/tz_template.html', {'timezones': pytz.common_timezones})
 
 
+class ProjectCreateView(generic.CreateView):
+    model = Project
+    form_class = ProjectForm
+    extra_context = {'title': 'Project Create'}
+
+
 class ProjectListView(generic.ListView):
     model = Project
     extra_context = {'title': 'Projects List'}
@@ -22,22 +28,44 @@ class ProjectListView(generic.ListView):
 
 class ProjectDetailView(generic.DetailView):
     model = Project
-    extra_context = {'title': 'Projects Detail'}
-
-
-class ProjectCreateView(generic.CreateView):
-    model = Project
-    form_class = ProjectForm
-    extra_context = {'title': 'Projects Create'}
+    extra_context = {'title': 'Project Detail'}
 
 
 class ProjectUpdateView(generic.UpdateView):
     model = Project
     form_class = ProjectForm
-    extra_context = {'title': 'Projects Update'}
+    extra_context = {'title': 'Project Update'}
     template_name_suffix = '_update_form'
 
 
 class ProjectDeleteView(generic.DeleteView):
     model = Project
     success_url = reverse_lazy('desk:project_list')
+
+
+class TaskCreateView(generic.CreateView):
+    model = Task
+    form_class = TaskForm
+    extra_context = {'title': 'Task Create'}
+
+
+class TaskListView(generic.ListView):
+    model = Task
+    extra_context = {'title': 'Tasks List'}
+
+
+class TaskDetailView(generic.DetailView):
+    model = Task
+    extra_context = {'title': 'Task Detail'}
+
+
+class TaskUpdateView(generic.UpdateView):
+    model = Task
+    form_class = TaskForm
+    extra_context = {'title': 'Task Update'}
+    template_name_suffix = '_update_form'
+
+
+class TaskDeleteView(generic.DeleteView):
+    model = Task
+    success_url = reverse_lazy('desk:task_list')
