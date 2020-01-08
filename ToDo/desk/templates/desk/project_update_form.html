@@ -8,8 +8,7 @@
 
     <form action="{% url 'desk:project_update' project.id %}" method="post">
         {% csrf_token %}
-        <label for="{{ project.name }}-id">Project name: </label>
-        <input type="text" name="name" id="{{ project.name }}-id">
+        {{ form }}
         <input type="submit" value="Update">
     </form>
 {% endblock content %}

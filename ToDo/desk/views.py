@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
 from .models import Project
+from .forms import ProjectForm
 
 
 def set_timezone(request):
@@ -26,13 +27,13 @@ class ProjectDetailView(generic.DetailView):
 
 class ProjectCreateView(generic.CreateView):
     model = Project
-    fields = ('name', )
+    form_class = ProjectForm
     extra_context = {'title': 'Projects Create'}
 
 
 class ProjectUpdateView(generic.UpdateView):
     model = Project
-    fields = ('name', )
+    form_class = ProjectForm
     extra_context = {'title': 'Projects Update'}
     template_name_suffix = '_update_form'
 
