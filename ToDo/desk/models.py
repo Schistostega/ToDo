@@ -10,7 +10,7 @@ class Project(Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('desk:project_detail', kwargs={'pk': self.id})
+        return reverse('desk:project_list')
 
 
 class Task(Model):
@@ -20,7 +20,7 @@ class Task(Model):
     project = ForeignKey(Project, on_delete=CASCADE)
 
     def __str__(self):
-        return f'{self.title}, created: {self.date_created}, along to: {self.project}'
+        return f'{self.title}, created: {self.date_created}'
 
     def get_absolute_url(self):
-        return reverse('desk:task_detail', kwargs={'pk': self.id})
+        return reverse('desk:project_list')

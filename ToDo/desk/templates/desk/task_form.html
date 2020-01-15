@@ -1,14 +1,26 @@
 {% extends "desk/base.html" %}
 {% block content %}
-    <h1>{{ task }}</h1>
+{% load add_attr %}
 
     {% if error_message %}
         <p><strong>{{ error_message }}</strong></p>
     {% endif %}
 
-    <form action="{% url 'desk:task_create' %}" method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Create">
-    </form>
+    <div class="m-auto w-50 border rounded text-center p-3 text-white">
+        <form action="{% url 'desk:task_create' %}" method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field|add_attr:"class:form-control bg-dark text-white" }}
+                </div>
+            {% endfor %}
+            <span class="w-50 m-auto d-flex justify-content-around">
+                <input class="btn btn-dark border-light" type="submit" value="Create">
+                <a class="btn btn-dark" href="{% url 'desk:project_list' %}">Cancel</a>
+            </span>
+        </form>
+    </div>
+
+
 {% endblock content %}

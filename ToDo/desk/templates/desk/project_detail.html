@@ -1,6 +1,0 @@
-{% extends "desk/base.html" %}
-{% block content %}
-    <h1>{{ project }}</h1>
-    <a href="{% url 'desk:project_update' project.id %}">Update Project</a>
-    <a href="{% url 'desk:project_delete' project.id %}">Delete Project</a>
-{% endblock content %}

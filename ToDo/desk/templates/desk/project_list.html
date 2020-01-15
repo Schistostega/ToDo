@@ -1,12 +1,94 @@
-{% extends "desk/base.html" %}
+{% extends 'desk/base.html' %}
+{% load static %}
+
 {% block content %}
-    {% if project_list %}
-        <ul>
-            {% for project in project_list %}
-                <li><a href="{% url 'desk:project_detail' project.id %}">{{ project.name }}</a></li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <h2>There are no projects yet.</h2>
-    {% endif %}
+
+<div class="row m-2" style="height: 75vh">
+    <div class="col-3 border rounded p-0">
+        <div class="border rounded m-1 p-2 text-center text-white position-relative">
+            <span>Projects</span>
+            <a href="{% url 'desk:project_create' %}" class="float-right stretched-link" data-toggle="tooltip" data-placement="right" title="Create a project">
+                <img src="{% static 'desk/icons/create-16.png' %}" alt="C">
+            </a>
+        </div>
+        <div class="border rounded m-1">
+            <div id="project-btn-group" class="btn-group-vertical d-block">
+<!--                generate project list-->
+               {% for project in project_list %}
+                    <button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#collapse-{{ project.id }}"  aria-expanded="false" aria-controls="collapse-{{ project.id }}">
+                        {{ project }}
+                        <span class="float-right">
+                            <a href="{% url 'desk:project_update' project.id %}" data-toggle="tooltip" data-placement="right" title="Edit the project">
+                                <img src="{% static 'desk/icons/edit-16.png' %}" alt="U">
+                            </a>
+                            <a href="{% url 'desk:project_delete' project.id %}" data-toggle="tooltip" data-placement="right" title="Delete the project">
+                                <img src="{% static 'desk/icons/delete-16.png' %}" alt="D">
+                            </a>
+                        </span>
+                    </button>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div id="task-area" class="col-9 border rounded p-1">
+        <div class="border rounded p-2 mb-1 text-center text-white position-relative">
+            <span>Tasks</span>
+            <a href="{% url 'desk:task_create' %}" class="float-right stretched-link" data-toggle="tooltip" data-placement="right" title="Create a task">
+                <img src="{% static 'desk/icons/create-16.png' %}" alt="C">
+            </a>
+        </div>
+        {% for project in project_list %}
+            <div id="collapse-{{ project.id }}" class="collapse rounded bg-dark text-white" data-parent="#task-area">
+                <div class="card card-body bg-dark border-light btn-group-vertical p-0">
+<!--                        generate task list-->
+                    {% if project.task_set.all %}
+                        {% for task in project.task_set.all %}
+                            <button class="btn btn-dark text-left" type="button" data-toggle="collapse" data-target="#collapse-task-{{ task.id }}" aria-expanded="false" aria-controls="collapse-task-{{ task.id }}">
+                                {{ task }}
+                                <span class="float-right">
+                                    <a href="{% url 'desk:task_update' task.id %}" data-toggle="tooltip" data-placement="right" title="Edit the task">
+                                        <img src="{% static 'desk/icons/edit-16.png' %}" alt="U">
+                                    </a>
+                                    <a href="{% url 'desk:task_delete' task.id %}" data-toggle="tooltip" data-placement="right" title="Delete the task">
+                                        <img src="{% static 'desk/icons/delete-16.png' %}" alt="D">
+                                    </a>
+                                </span>
+                            </button>
+                        {% endfor %}
+                    {% else %}
+                        <p class="pt-2 pl-2">There no tasks yet.</p>
+                    {% endif %}
+<!--                       end generate task list-->
+                </div>
+            </div>
+
+<!--                generate task detail-->
+            {% if project.task_set.all %}
+                {% for task in project.task_set.all %}
+                    <div id="collapse-task-{{ task.id }}" class="collapse rounded bg-dark text-white" data-parent="#task-area">
+                        <div class="card card-body bg-dark border-light">
+                            <p class="row"><span class="col-1">Tittle: </span>{{ task.title }}</p>
+                            <p class="row"><span class="col-1">Created: </span>{{ task.date_created }}</p>
+                            <p>Description: </p>
+                            <p>{{ task.description }}</p>
+                            <span>
+                                <a href="{% url 'desk:task_update' task.id %}" data-toggle="tooltip" data-placement="right" title="Edit the task">
+                                    <img src="{% static 'desk/icons/edit-16.png' %}" alt="U">
+                                </a>
+                                <a href="{% url 'desk:task_delete' task.id %}" data-toggle="tooltip" data-placement="right" title="Delete the task">
+                                    <img src="{% static 'desk/icons/delete-16.png' %}" alt="D">
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+<!--               end generate task detail-->
+
+        {% endfor %}
+    </div>
+
+</div>
+
 {% endblock content %}

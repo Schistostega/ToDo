@@ -1,14 +1,23 @@
 {% extends 'desk/base.html' %}
 {% block content %}
-    <h1>{{ project }}</h1>
+{% load add_attr %}
 
     {% if error_message %}
         <p><strong>{{ error_message }}</strong></p>
     {% endif %}
 
-    <form action="{% url 'desk:project_update' project.id %}" method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Update">
-    </form>
+    <div class="m-auto w-50 border rounded text-center p-3 text-white">
+        <h2>Enter new name for the project.</h2>
+        <form action="{% url 'desk:project_update' project.id %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.name|add_attr:"class:form-control" }}
+            </div>
+            <span class="w-50 m-auto d-flex justify-content-around">
+                <input class="btn btn-dark border-light" type="submit" value="Update">
+                <a class="btn btn-dark" href="{% url 'desk:project_list' %}">Cancel</a>
+            </span>
+        </form>
+    </div>
+
 {% endblock content %}

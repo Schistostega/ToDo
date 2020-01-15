@@ -1,9 +1,14 @@
 {% extends 'desk/base.html' %}
 {% block content %}
-    <form method="post">
-        {% csrf_token %}
-        <p>Are you sure you want to delete "{{ object }}"?</p>
-        <input type="submit" value="Confirm">
-        <a href="{% url 'desk:task_detail' object.id %}">Cancel</a>
-    </form>
+    <div class="m-auto w-50 border rounded text-center p-2">
+        <form method="post" class="form-group text-white">
+            {% csrf_token %}
+            <h2>Are you sure you want to delete task: <br> "{{ object }}" ?</h2>
+            <span class="w-50 m-auto d-flex justify-content-around">
+                <input class="btn btn-danger" type="submit" value="Confirm">
+                <a class="btn btn-dark" href="{% url 'desk:project_list' %}">Cancel</a>
+            </span>
+        </form>
+    </div>
+
 {% endblock content %}

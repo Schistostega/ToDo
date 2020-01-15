@@ -26,11 +26,6 @@ class ProjectListView(generic.ListView):
     extra_context = {'title': 'Projects List'}
 
 
-class ProjectDetailView(generic.DetailView):
-    model = Project
-    extra_context = {'title': 'Project Detail'}
-
-
 class ProjectUpdateView(generic.UpdateView):
     model = Project
     form_class = ProjectForm
@@ -49,16 +44,6 @@ class TaskCreateView(generic.CreateView):
     extra_context = {'title': 'Task Create'}
 
 
-class TaskListView(generic.ListView):
-    model = Task
-    extra_context = {'title': 'Tasks List'}
-
-
-class TaskDetailView(generic.DetailView):
-    model = Task
-    extra_context = {'title': 'Task Detail'}
-
-
 class TaskUpdateView(generic.UpdateView):
     model = Task
     form_class = TaskForm
@@ -68,4 +53,4 @@ class TaskUpdateView(generic.UpdateView):
 
 class TaskDeleteView(generic.DeleteView):
     model = Task
-    success_url = reverse_lazy('desk:task_list')
+    success_url = reverse_lazy('desk:project_list')
