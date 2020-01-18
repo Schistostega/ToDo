@@ -4,14 +4,12 @@ from django.utils import timezone
 from .models import Project, Task
 
 
-class ProjectForm(forms.ModelForm):
-    class Meta:
-        model = Project
-        fields = ('name', )
-
-
 class TaskForm(forms.ModelForm):
-    date_created = forms.DateTimeField(initial=timezone.now)
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user')
+        super().__init__(*args, **kwargs)
+        self.fields['date_created'] = forms.DateTimeField(initial=timezone.now)
+        self.fields['project'].queryset = Project.objects.filter(user=user)
 
     class Meta:
         model = Task

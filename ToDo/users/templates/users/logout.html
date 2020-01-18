@@ -1,0 +1,11 @@
+{% extends 'desk/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="m-auto w-50 border rounded p-3 text-center text-white">
+        <h2>You have been log out.</h2>
+        <div class="border-top mt-4 pt-2 position-relative">
+                <a href="{% url 'users:login' %}" class="text-white stretched-link">Log In</a>
+        </div>
+    </div>
+{% endblock content %}

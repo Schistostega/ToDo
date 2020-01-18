@@ -1,15 +1,18 @@
 from django.db.models import Model, ForeignKey, CASCADE
 from django.db.models.fields import CharField, DateTimeField, TextField
+from django.contrib.auth.models import User
 from django.urls import reverse
 
 
 class Project(Model):
     name = CharField(max_length=50)
+    user = ForeignKey(User, on_delete=CASCADE)
 
     def __str__(self):
         return self.name
 
-    def get_absolute_url(self):
+    @staticmethod
+    def get_absolute_url():
         return reverse('desk:project_list')
 
 
@@ -22,5 +25,6 @@ class Task(Model):
     def __str__(self):
         return f'{self.title}, created: {self.date_created}'
 
-    def get_absolute_url(self):
+    @staticmethod
+    def get_absolute_url():
         return reverse('desk:project_list')
