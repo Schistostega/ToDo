@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from .models import Project, Task
-from .forms import TaskForm
+from .forms import ProjectForm, TaskForm
 
 
 def set_timezone(request):
@@ -19,8 +19,14 @@ def set_timezone(request):
 
 class ProjectCreateView(LoginRequiredMixin, generic.CreateView):
     model = Project
-    fields = ('name', )
+    form_class = ProjectForm
+    template_name = 'desk/form.html'
     extra_context = {'title': 'Project Create'}
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['button_label'] = 'Create'
+        return kwargs
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -37,9 +43,14 @@ class ProjectListView(LoginRequiredMixin, generic.ListView):
 
 class ProjectUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
     model = Project
-    fields = ('name', )
+    form_class = ProjectForm
+    template_name = 'desk/form.html'
     extra_context = {'title': 'Project Update'}
-    template_name_suffix = '_update_form'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['button_label'] = 'Update'
+        return kwargs
 
     def test_func(self):
         project = self.get_object()
@@ -64,11 +75,13 @@ class ProjectDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteV
 class TaskCreateView(LoginRequiredMixin, generic.CreateView):
     model = Task
     form_class = TaskForm
+    template_name = 'desk/form.html'
     extra_context = {'title': 'Task Create'}
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
+        kwargs['button_label'] = 'Create'
         return kwargs
 
     def form_valid(self, form):
@@ -81,8 +94,14 @@ class TaskCreateView(LoginRequiredMixin, generic.CreateView):
 class TaskUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
     model = Task
     form_class = TaskForm
+    template_name = 'desk/form.html'
     extra_context = {'title': 'Task Update'}
-    template_name_suffix = '_update_form'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        kwargs['button_label'] = 'Update'
+        return kwargs
 
     def test_func(self):
         task = self.get_object()
