@@ -13,5 +13,7 @@ urlpatterns = [
     path('tasks/update/<int:pk>', views.TaskUpdateView.as_view(), name='task_update'),
     path('tasks/delete/<int:pk>', views.TaskDeleteView.as_view(), name='task_delete'),
 
+    path('task/complete/<int:pk>', views.complete_task, name='task_complete'),
+
     path('set-timezone', views.set_timezone, name='set_timezone'),
 ]

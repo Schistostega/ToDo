@@ -1,9 +1,11 @@
 import pytz
 from django.core.exceptions import PermissionDenied
 from django.views import generic
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.decorators import login_required
 
 from .models import Project, Task
 from .forms import ProjectForm, TaskForm
@@ -24,8 +26,12 @@ class ProjectCreateView(LoginRequiredMixin, generic.CreateView):
     extra_context = {'title': 'Project Create'}
 
     def get_form_kwargs(self):
+        """
+        Function to send extra args to the form
+        """
         kwargs = super().get_form_kwargs()
         kwargs['button_label'] = 'Create'
+        kwargs['form_legend'] = 'Enter a name for the new project'
         return kwargs
 
     def form_valid(self, form):
@@ -48,8 +54,12 @@ class ProjectUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateV
     extra_context = {'title': 'Project Update'}
 
     def get_form_kwargs(self):
+        """
+        Function to send extra args to the form
+        """
         kwargs = super().get_form_kwargs()
         kwargs['button_label'] = 'Update'
+        kwargs['form_legend'] = 'Enter new name for the project'
         return kwargs
 
     def test_func(self):
@@ -79,9 +89,13 @@ class TaskCreateView(LoginRequiredMixin, generic.CreateView):
     extra_context = {'title': 'Task Create'}
 
     def get_form_kwargs(self):
+        """
+        Function to send extra args to the form
+        """
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
         kwargs['button_label'] = 'Create'
+        kwargs['form_legend'] = 'Creating Task Form.'
         return kwargs
 
     def form_valid(self, form):
@@ -98,9 +112,13 @@ class TaskUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView
     extra_context = {'title': 'Task Update'}
 
     def get_form_kwargs(self):
+        """
+        Function to send extra args to the form
+        """
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
         kwargs['button_label'] = 'Update'
+        kwargs['form_legend'] = 'Updating Task Form.'
         return kwargs
 
     def test_func(self):
@@ -123,3 +141,12 @@ class TaskDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView
             return True
         else:
             return False
+
+
+@login_required
+def complete_task(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    task.status = 3
+    task.save()
+    messages.success(request, f'Task has been marked as done.')
+    return redirect('desk:project_list')

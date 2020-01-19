@@ -3,6 +3,7 @@
 
 {% block content %}
 
+<!--LEFT SIDE-->
 <div class="row" style="height: 75vh">
     <div class="col-3 border rounded p-0">
         <div class="border rounded m-1 p-2 text-center text-white position-relative">
@@ -30,7 +31,7 @@
             </div>
         </div>
     </div>
-
+<!--RIGHT SIDE-->
     <div id="task-area" class="col-9 border rounded p-1">
         <div class="border rounded p-2 mb-1 text-center text-white position-relative">
             <span>Tasks</span>
@@ -45,8 +46,28 @@
                     {% if project.task_set.all %}
                         {% for task in project.task_set.all %}
                             <button class="btn btn-dark text-left" type="button" data-toggle="collapse" data-target="#collapse-task-{{ task.id }}" aria-expanded="false" aria-controls="collapse-task-{{ task.id }}">
-                                {{ task }}
+
+<!--                                badges-->
+                                {% if task.status == 0 %}
+                                    <span class="badge badge-secondary col-1">new</span>
+                                {% elif task.status == 1 %}
+                                    <span class="badge badge-info col-1">working</span>
+                                {% elif task.status == 2 %}
+                                    <span class="badge badge-danger col-1">wasted</span>
+                                {% elif task.status == 3 %}
+                                    <span class="badge badge-success col-1">done</span>
+                                {% endif %}
+<!--                                end badges-->
+
+                                <span class=>{{ task.title }}</span>
                                 <span class="float-right">
+
+<!--                                    deadline-->
+                                    {% if task.deadline and task.status != 3 %}
+                                        <span class="mr-2">Deadline in: {{ task.update_status }}</span>
+                                    {% endif %}
+<!--                                    end deadline-->
+
                                     <a href="{% url 'desk:task_update' task.id %}" data-toggle="tooltip" data-placement="right" title="Edit the task">
                                         <img src="{% static 'desk/icons/edit-16.png' %}" alt="U">
                                     </a>
@@ -68,18 +89,51 @@
                 {% for task in project.task_set.all %}
                     <div id="collapse-task-{{ task.id }}" class="collapse rounded bg-dark text-white" data-parent="#task-area">
                         <div class="card card-body bg-dark border-light">
-                            <p class="row"><span class="col-1">Tittle: </span>{{ task.title }}</p>
-                            <p class="row"><span class="col-1">Created: </span>{{ task.date_created }}</p>
+                            <p class="row">
+                                <span class="col-2">Tittle: </span>{{ task.title }}
+                                <span class="ml-auto mr-2">
+                                    <a href="{% url 'desk:task_update' task.id %}" data-toggle="tooltip" data-placement="right" title="Edit the task">
+                                        <img src="{% static 'desk/icons/edit-16.png' %}" alt="U">
+                                    </a>
+                                    <a href="{% url 'desk:task_delete' task.id %}" data-toggle="tooltip" data-placement="right" title="Delete the task">
+                                        <img src="{% static 'desk/icons/delete-16.png' %}" alt="D">
+                                    </a>
+                                </span>
+                            </p>
+                            <p class="row"><span class="col-2">Status: </span>
+
+<!--                                badges-->
+                                {% if task.status == 0 %}
+                                    <span class="badge badge-secondary col-1">new</span>
+                                {% elif task.status == 1 %}
+                                    <span class="badge badge-info col-1">working</span>
+                                {% elif task.status == 2 %}
+                                    <span class="badge badge-danger col-1">wasted</span>
+                                {% elif task.status == 3 %}
+                                    <span class="badge badge-success col-1">done</span>
+                                {% endif %}
+                            </p>
+<!--                                end badges-->
+
+                            <p class="row"><span class="col-2">Created: </span>{{ task.date_created }}</p>
+
+                            <p class="row"><span class="col-2">Deadline: </span>
+                                {% if task.deadline and task.status != 3 %}
+                                    {{ task.deadline }} ({{ task.update_status }})
+                                {% elif task.deadline and task.status == 3 %}
+                                    {{ task.deadline }}
+                                {% else  %}
+                                    not defined
+                                {% endif %}
+                            </p>
+
                             <p>Description: </p>
                             <p>{{ task.description }}</p>
-                            <span>
-                                <a href="{% url 'desk:task_update' task.id %}" data-toggle="tooltip" data-placement="right" title="Edit the task">
-                                    <img src="{% static 'desk/icons/edit-16.png' %}" alt="U">
-                                </a>
-                                <a href="{% url 'desk:task_delete' task.id %}" data-toggle="tooltip" data-placement="right" title="Delete the task">
-                                    <img src="{% static 'desk/icons/delete-16.png' %}" alt="D">
-                                </a>
-                            </span>
+                            <div class="row m-auto">
+                                {% if task.status == 0 or task.status == 1 %}
+                                    <a href="{% url 'desk:task_complete' task.id %}" class="btn btn-success">Mark as done</a>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 {% endfor %}
